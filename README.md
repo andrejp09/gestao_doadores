@@ -51,8 +51,8 @@ Este projeto foi desenvolvido com Java 21 e Maven. Ele tem como objetivo receber
 **Exemplo de Resposta:**
 ```json
 {
-    "homens": 20.5,
-    "mulheres": 18.3
+    "masculino": 20.5,
+    "feminino": 18.3
 }
 ```
 
@@ -65,11 +65,11 @@ Este projeto foi desenvolvido com Java 21 e Maven. Ele tem como objetivo receber
 ```json
 [
     {
-        "tipoSanguineo": "A+",
+        "tipo": "A+",
         "mediaIdade": 30
     },
     {
-        "tipoSanguineo": "O-",
+        "tipo": "O-",
         "mediaIdade": 28
     }
 ]
@@ -85,11 +85,11 @@ Este projeto foi desenvolvido com Java 21 e Maven. Ele tem como objetivo receber
 [
     {
         "tipoReceptor": "A+",
-        "possiveisDoadores": ["A+", "A-", "O+", "O-"]
+        "quantidadeDoadores": 12
     },
     {
         "tipoReceptor": "B+",
-        "possiveisDoadores": ["B+", "B-", "O+", "O-"]
+        "quantidadeDoadores": 20
     }
 ]
 ```
