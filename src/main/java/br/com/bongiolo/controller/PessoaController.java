@@ -6,6 +6,7 @@ import br.com.bongiolo.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -18,8 +19,8 @@ public class PessoaController {
     private PessoaService pessoaService;
 
     @PostMapping("/carregar")
-    public ResponseEntity<List<Pessoa>> createPessoas(@RequestBody List<PessoaDTO> pessoasDTO) {
-        List<Pessoa> savedPessoas = pessoaService.process(pessoasDTO);
+    public ResponseEntity<List<Pessoa>> createPessoas(@RequestParam("file") MultipartFile file) {
+        List<Pessoa> savedPessoas = pessoaService.process(file);
         return ResponseEntity.ok(savedPessoas);
     }
 

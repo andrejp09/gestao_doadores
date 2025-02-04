@@ -9,15 +9,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
@@ -44,14 +46,14 @@ class PessoaControllerTest {
 
     @Test
     public void deveriaProcessarDadosDePessoa() throws Exception {
-        when(pessoaService.process(pessoasDTO)).thenReturn(pessoas);
+        MockMultipartFile file = new MockMultipartFile("file", "pessoas.json", "application/json", "conteudo do arquivo".getBytes());
 
-        mockMvc.perform(post("/api/pessoas/carregar")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(pessoasDTO)))
+        when(pessoaService.process(any(MultipartFile.class))).thenReturn(pessoas);
+        mockMvc.perform(multipart("/api/pessoas/carregar")
+                        .file(file)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk());
-
-        verify(pessoaService, times(1)).process(any());
+        verify(pessoaService, times(1)).process(any(MultipartFile.class));
     }
 
 

@@ -8,9 +8,12 @@ import br.com.bongiolo.projection.*;
 import br.com.bongiolo.repository.PessoaRepository;
 import br.com.bongiolo.repository.TipoSanguineoRepository;
 import br.com.bongiolo.service.PessoaService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +31,19 @@ public class PessoaServiceImpl implements PessoaService {
 
     @Autowired
     private ModelMapper modelMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public List<Pessoa> process(List<PessoaDTO> pessoasDTO) {
-        List<Pessoa> pessoas = pessoasDTO.stream().map(this::convertToEntity).toList();
-        return pessoaRepository.saveAll(pessoas);
+    public List<Pessoa> process(MultipartFile file) {
+        try {
+            String content = new String(file.getBytes());
+            List<PessoaDTO> pessoasDTO = objectMapper.readValue(content, new TypeReference<List<PessoaDTO>>() {
+            });
+            List<Pessoa> pessoas = pessoasDTO.stream().map(this::convertToEntity).toList();
+            return pessoaRepository.saveAll(pessoas);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
